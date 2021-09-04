@@ -132,11 +132,12 @@ export default {
 		};
 	},
 	methods: {
+		//TODO: ISBN,year,price等栏的输入合法性判断
 		checkISBN() {
 			return true;
 		},
 		checkAuthor() {
-			if (this.book.aid == -1) {
+			if (this.book.aid == -1) { //如果已填的读者不在库中，新建一个
 				let data = {
 					name: this.author
 				};
@@ -161,7 +162,7 @@ export default {
 		},
 
 		submit() {
-			this.checkAuthor();
+			this.checkAuthor(); //处理作者
 			if (this.book_exist) this.updateBook();
 			else this.saveBook();
 			let data = {
@@ -186,6 +187,8 @@ export default {
 						this.book_exist = false;
 						return;
 					}
+					//自动填充
+					//TODO: 记忆从服务端获取的书籍信息，然后判断用户是否对其改动，并在提交按钮时给出提醒
 					console.log(res.data);
 					this.book_exist = true;
 					this.book = res.data;
@@ -197,13 +200,19 @@ export default {
 			AuthorService.getByName(name)
 				.then(res => {
 					if (res != null) {
-						//此处返回了一个author列表，需实现一个下拉框选择
+						//此处返回了一个author列表
+						//TODO: 实现一个下拉框，列出可选的已在库中的作者（类似填报外出申请，写辅导员名字弹出的那个东西）
 						console.log(res.data[0]);
 						this.book.aid = res.data[0].id;
 					}
 				})
 		}
 	},
+	/*
+	添加watch事件
+	作用是监视isbn,author输入框的变动，以进行自动填充/建议
+	使用timer在用户输入停止300ms后再发送请求
+	*/
 	watch: {
 		'book.isbn': function(val) {
 			clearTimeout(this.timeout);
