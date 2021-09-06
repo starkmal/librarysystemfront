@@ -188,7 +188,7 @@ export default {
 						return;
 					}
 					//自动填充
-					//TODO: 记忆从服务端获取的书籍信息，然后判断用户是否对其改动，并在提交按钮时给出提醒
+					//TODO: 记忆从服务端获取的书籍信息，然后判断用户是否对其改动，并在提交按钮时给出提醒
 					console.log(res.data);
 					this.book_exist = true;
 					this.book = res.data;
