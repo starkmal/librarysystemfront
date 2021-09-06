@@ -13,7 +13,6 @@ class AuthorService {
 		return http.get(`/author/${id}/books`);
 	}
 
-
 	create(data) {
 		return http.post(`/author`, data);
 	}

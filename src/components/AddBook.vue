@@ -136,12 +136,14 @@ export default {
 		checkISBN() {
 			return true;
 		},
-		checkAuthor() {
+		async checkAuthor() {
+			await this.handleAuthor(this.author);
+			console.log(this.book.aid);
 			if (this.book.aid == -1) { //如果已填的读者不在库中，新建一个
 				let data = {
 					name: this.author
 				};
-				AuthorService.create(data)
+				await AuthorService.create(data)
 					.then(res => {
 						this.book.aid = res.data.id;
 					})
@@ -149,22 +151,7 @@ export default {
 			}
 		},
 
-		saveBook() {
-			BookService.create(this.book)
-				.then(res => console.log(res.data))
-				.catch(e => console.log(e));
-		},
-
-		updateBook() {
-			BookService.update(this.book.isbn, this.book)
-				.then(res => console.log(res.data))
-				.catch(e => console.log(e));
-		},
-
-		submit() {
-			this.checkAuthor(); //处理作者
-			if (this.book_exist) this.updateBook();
-			else this.saveBook();
+		submitRepo() {
 			let data = {
 				isbn: this.book.isbn,
 				location: this.location,
@@ -179,32 +166,68 @@ export default {
 			this.submitted = true;
 		},
 
-		handleISBN(isbn) {
+		async submit() {
+			await this.handleISBN(this.book.isbn);
+			await this.checkAuthor(); //处理作者
+			console.log(this.book_exist);
+			let data = {
+				isbn: this.book.isbn,
+				price: this.book.price,
+				title: this.book.title,
+				description: this.book.description,
+				publisher: this.book.publisher,
+				year: this.book.year,
+				aid: this.book.aid,
+				popularity: this.book.popularity
+			};
+			console.log(data);
+			if (this.book_exist) {
+				BookService.update(this.book.isbn, data)
+					.then(res => {
+						console.log(res.data);
+						this.submitRepo();
+					})
+					.catch(e => console.log(e));
+			}
+			else {
+				BookService.create(data)
+					.then(res => {
+						console.log(res.data);
+						this.submitRepo();
+					})
+					.catch(e => console.log(e));
+			}
+
+		},
+
+		async handleISBN(isbn) {
 			console.log(isbn);
-			BookService.get(isbn)
+			await BookService.get(isbn)
 				.then(res => {
-					if (res == null) {
-						this.book_exist = false;
-						return;
-					}
 					//自动填充
-					//TODO: 记忆从服务端获取的书籍信息，然后判断用户是否对其改动，并在提交按钮时给出提醒
+					// TODO:记忆从服务端获取的书籍信息，然后判断用户是否对其改动，并在提交按钮时给出提醒
 					console.log(res.data);
 					this.book_exist = true;
 					this.book = res.data;
 				})
-				.catch(e => console.log(e));
+				.catch(e => {
+					console.log(e);
+					this.book_exist = false;
+				});
 		},
 
-		handleAuthor(name) {
-			AuthorService.getByName(name)
+		async handleAuthor(name) {
+			await AuthorService.getByName(name)
 				.then(res => {
-					if (res != null) {
+					console.log(res.data);
+					if (res.data[0] != null) {
 						//此处返回了一个author列表
 						//TODO: 实现一个下拉框，列出可选的已在库中的作者（类似填报外出申请，写辅导员名字弹出的那个东西）
 						console.log(res.data[0]);
 						this.book.aid = res.data[0].id;
 					}
+					else this.book.aid = -1;
+					console.log(this.book.aid);
 				})
 		}
 	},
