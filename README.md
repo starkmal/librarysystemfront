@@ -8,6 +8,8 @@
 
 如果没有找到author或book，会自动创建
 
+2、实现了查询并分页的功能
+
 ## Project setup 依赖安装
 ```
 npm install vue-router axios
