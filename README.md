@@ -13,6 +13,7 @@
 ## Project setup 依赖安装
 ```
 npm install vue-router axios
+npm install bootstrap-vue
 ```
 
 ### Compiles and hot-reloads for development
