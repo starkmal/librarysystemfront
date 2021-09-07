@@ -7,7 +7,7 @@
 			class="form-control"
 			id="isbn"
 			required
-			v-model="book.isbn"
+			v-model="data.book.isbn"
 			name="isbn"
 		/>
 	</div>
@@ -18,7 +18,7 @@
 			class="form-control"
 			id="title"
 			required
-			v-model="book.title"
+			v-model="data.book.title"
 			name="title"
 		/>
 	</div>
@@ -29,7 +29,7 @@
 			class="form-control"
 			id="author"
 			required
-			v-model="author"
+			v-model="data.book.author.name"
 			name="author"
 		/>
 	</div>
@@ -40,7 +40,7 @@
 			class="form-control"
 			id="price"
 			required
-			v-model="book.price"
+			v-model="data.book.price"
 			name="price"
 		/>
 	</div>
@@ -50,7 +50,7 @@
 		<input
 			class="form-control"
 			id="description"
-			v-model="book.description"
+			v-model="data.book.description"
 			name="description"
 		/>
 	</div>
@@ -60,7 +60,7 @@
 		<input
 			class="form-control"
 			id="publisher"
-			v-model="book.publisher"
+			v-model="data.book.publisher"
 			name="publisher"
 		/>
 	</div>
@@ -70,7 +70,7 @@
 		<input
 			class="form-control"
 			id="year"
-			v-model="book.year"
+			v-model="data.book.year"
 			name="year"
 		/>
 	</div>
@@ -80,7 +80,7 @@
 		<input
 			class="form-control"
 			id="popularity"
-			v-model="book.popularity"
+			v-model="data.book.popularity"
 			name="popularity"
 		/>
 	</div>
@@ -91,7 +91,7 @@
 			class="form-control"
 			id="location"
 			required
-			v-model="location"
+			v-model="data.location"
 			name="location"
 		/>
 	</div>
@@ -114,121 +114,94 @@ export default {
 	name: "add-book",
 	data() {
 		return {
-			id: null,
-			location: "",
-			author: "",
-			book: {
-				isbn: null,
-				price: "",
-				title: "",
-				description: "",
-				publisher: "",
-				year: null,	
-				aid: -1,
-				popularity: 0
+			data: {
+				location: null,
+				book: {
+					title: null,
+					popularity: null,
+					year: null,
+					publisher: null,
+					isbn: null,
+					description: null,
+					price: null,
+					author: {
+						name: null
+					}
+				}
 			},
-			submitted: false,
-			book_exist: false
+			submitted: false
 		};
 	},
 	methods: {
-		//TODO: ISBN,year,price等栏的输入合法性判断
-		checkISBN() {
-			return true;
-		},
-		async checkAuthor() {
-			await this.handleAuthor(this.author);
-			console.log(this.book.aid);
-			if (this.book.aid == -1) { //如果已填的读者不在库中，新建一个
-				let data = {
-					name: this.author
-				};
-				await AuthorService.create(data)
-					.then(res => {
-						this.book.aid = res.data.id;
-					})
-					.catch(e => console.log(e));
-			}
-		},
 
-		submitRepo() {
-			let data = {
-				isbn: this.book.isbn,
-				location: this.location,
-				state: "inlib"
-			};
-			BookInLibService.create(data)
-				.then(res => {
+		submit() {
+			AuthorService.getByName(this.data.book.author.name)
+			.then(() => this.step2()) //作者已在库中
+			.catch(()=>{
+				let data = {
+					name: this.data.book.author.name,
+					desc: "还没有描述"
+				};
+				AuthorService.create(data)
+				.then(res=>{
 					console.log(res.data);
-					this.id = res.data.id;
+					this.data.book.author = res.data;
+					this.step2();
 				})
 				.catch(e => console.log(e));
+			}); //作者未在库中
+		},
+
+		step2() {
+			BookService.get(this.data.book.isbn)
+			.then(()=>{
+				BookService.update(this.data.book.isbn, this.data.book)
+				.then(() => this.step3())
+				.catch(e=>console.log(e))
+			}) //书已在库中，更新
+			.catch(()=>{
+				let param = {
+					isbn: this.data.book.isbn,
+					description: this.data.book.description,
+					popularity: this.data.book.popularity,
+					price: this.data.book.price,
+					publisher: this.data.book.publisher,
+					title: this.data.book.title,
+					year: this.data.book.year,
+					author_id: this.data.book.author.id,
+				};
+				BookService.create(param)
+				.then(res => {
+					console.log(res.data);
+					this.data.book = res.data;
+					this.step3();
+				})
+				.catch(e=>console.log(e));
+			}); //书未在库中，提交
+		},
+
+		step3() {
+			let data = {
+				book_isbn: this.data.book.isbn,
+				location: this.data.location,
+				state: "在库"
+			};
+			console.log(data);
+
+			BookInLibService.create(data)
+			.then()
+			.catch(e=>console.log(e));
+
 			this.submitted = true;
 		},
 
-		async submit() {
-			await this.handleISBN(this.book.isbn);
-			await this.checkAuthor(); //处理作者
-			console.log(this.book_exist);
-			let data = {
-				isbn: this.book.isbn,
-				price: this.book.price,
-				title: this.book.title,
-				description: this.book.description,
-				publisher: this.book.publisher,
-				year: this.book.year,
-				aid: this.book.aid,
-				popularity: this.book.popularity
-			};
-			console.log(data);
-			if (this.book_exist) {
-				BookService.update(this.book.isbn, data)
-					.then(res => {
-						console.log(res.data);
-						this.submitRepo();
-					})
-					.catch(e => console.log(e));
-			}
-			else {
-				BookService.create(data)
-					.then(res => {
-						console.log(res.data);
-						this.submitRepo();
-					})
-					.catch(e => console.log(e));
-			}
-
-		},
-
 		async handleISBN(isbn) {
-			console.log(isbn);
 			await BookService.get(isbn)
 				.then(res => {
-					//自动填充
-					// TODO:记忆从服务端获取的书籍信息，然后判断用户是否对其改动，并在提交按钮时给出提醒
 					console.log(res.data);
-					this.book_exist = true;
-					this.book = res.data;
+					this.data.book = res.data;
 				})
-				.catch(e => {
-					console.log(e);
-					this.book_exist = false;
-				});
-		},
-
-		async handleAuthor(name) {
-			await AuthorService.getByName(name)
-				.then(res => {
-					console.log(res.data);
-					if (res.data[0] != null) {
-						//此处返回了一个author列表
-						//TODO: 实现一个下拉框，列出可选的已在库中的作者（类似填报外出申请，写辅导员名字弹出的那个东西）
-						console.log(res.data[0]);
-						this.book.aid = res.data[0].id;
-					}
-					else this.book.aid = -1;
-					console.log(this.book.aid);
-				})
+				.catch(e => console.log(e));
 		}
 	},
 	/*
@@ -237,16 +210,10 @@ export default {
 	使用timer在用户输入停止300ms后再发送请求
 	*/
 	watch: {
-		'book.isbn': function(val) {
+		'data.book.isbn': function(val) {
 			clearTimeout(this.timeout);
 			this.timeout = setTimeout(() => {
 				this.handleISBN(val);
-			}, 300)
-		},
-		author: function(val) {
-			clearTimeout(this.timeout);
-			this.timeout = setTimeout(() => {
-				this.handleAuthor(val);
 			}, 300)
 		}
 	}
