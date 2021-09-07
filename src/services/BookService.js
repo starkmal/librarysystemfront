@@ -2,7 +2,7 @@ import http from "../http-common";
 
 class BookService {
 	getAll(params) {
-		return http.get("/search", {params});
+		return http.get("/book/search", {params});
 	}
 
 	get(isbn) {

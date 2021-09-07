@@ -1,108 +1,62 @@
 <template>
-<div class="submit-form">
-	<div v-if="!submitted">
-	<div class="form-group">
-		<label for="isbn">ISBN</label>
-		<input
-			class="form-control"
-			id="isbn"
-			required
-			v-model="data.book.isbn"
-			name="isbn"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="title">书名</label>
-		<input
-			class="form-control"
-			id="title"
-			required
-			v-model="data.book.title"
-			name="title"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="author">作者</label>
-		<input
-			class="form-control"
-			id="author"
-			required
-			v-model="data.book.author.name"
-			name="author"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="price">价格</label>
-		<input
-			class="form-control"
-			id="price"
-			required
-			v-model="data.book.price"
-			name="price"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="description">描述</label>
-		<input
-			class="form-control"
-			id="description"
-			v-model="data.book.description"
-			name="description"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="publisher">出版社</label>
-		<input
-			class="form-control"
-			id="publisher"
-			v-model="data.book.publisher"
-			name="publisher"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="year">年份</label>
-		<input
-			class="form-control"
-			id="year"
-			v-model="data.book.year"
-			name="year"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="popularity">推荐度</label>
-		<input
-			class="form-control"
-			id="popularity"
-			v-model="data.book.popularity"
-			name="popularity"
-		/>
-	</div>
-
-	<div class="form-group">
-		<label for="location">位置</label>
-		<input
-			class="form-control"
-			id="location"
-			required
-			v-model="data.location"
-			name="location"
-		/>
-	</div>
-
-	<button @click="submit" class="btn btn-success">Submit</button>
-	</div>
-
-	<div v-else>
-		<h4>You submitted successfully!</h4>
-	</div>
-</div>
+  <div class="submit-form">
+      <div v-if="!submitted">
+        <h4 style="text-align: center ;margin: 20px">新书入库</h4>
+        <Row id="form1" type="flex" gutter="40">
+          <i-col class="form-left">
+            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
+              <Form-item label="ISBN" prop="isbn">
+                <Input v-model="data.book.isbn" size="large" placeholder="请输入ISBN"></Input>
+              </Form-item>
+              <Form-item label="作品名称" prop="title">
+                <Input v-model="data.book.title" size="large" placeholder="请输入作品名称"></Input>
+              </Form-item>
+              <Form-item label="推荐指数" prop="popularity">
+                <Input v-model="data.book.popularity" size="large" placeholder="请输入推荐指数"></Input>
+              </Form-item>
+            </Form>
+			<Form ref="data.book.author" :model="data.book.author" :rules="ruleValidate.author" :label-width="80">
+              <Form-item label="作者" prop="name">
+                <Input v-model="data.book.author.name" size="large" placeholder="请输入作者"></Input>
+              </Form-item>
+			</Form>
+          </i-col>
+          <i-col class="form-right">
+            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
+              <Form-item label="出版社" prop="publisher">
+                <Input v-model="data.book.publisher" size="large" placeholder="请输入出版社"></Input>
+              </Form-item>
+              <Form-item label="定价" prop="price">
+                <Input v-model="data.book.price" size="large" placeholder="请输入定价"></Input>
+              </Form-item>
+              <Form-item label="出版年" prop="year">
+                <Input v-model="data.book.year" size="large" placeholder="请输入出版年"></Input>
+              </Form-item>
+            </Form>
+			<Form ref="data" :model="data" :rules="ruleValidate" :label-width="80">
+              <Form-item label="馆内位置" prop="location">
+                <Input v-model="data.location" size="large" placeholder="请输入馆内位置"></Input>
+              </Form-item>
+			</Form>
+          </i-col>
+        </Row>
+        <div id="form2">
+            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
+              <Form-item label="简介" prop="description">
+                <Input v-model="data.book.description" size="large"
+                       type="textarea"
+                       rows="5" placeholder="请输入作品简介"></Input>
+              </Form-item>
+            </Form>
+          </div>
+        <div id="btn" style="text-align:center">
+          <Button type="primary" size="large" @click="submit">提交</Button>
+        </div>
+      </div>
+      <div v-else>
+        <h4 style="margin: 100px auto">You submitted successfully!</h4>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -128,6 +82,18 @@ export default {
 						name: null
 					}
 				}
+			},
+			ruleValidate: {
+				isbn: [
+				{required: true, message: 'ISBN不能为空', trigger: 'blur'},
+				{type: 'string', len: 13, message: 'ISBN是13位数字，请输入正确格式', trigger: 'blur'}
+				],
+				title: [{required: true, message: '作品名称不能为空', trigger: 'blur'}],
+				author: {
+					name: [{required: true, message: '作者不能为空', trigger: 'blur'}]
+				},
+				publisher: [{required: true, message: '出版社不能为空', trigger: 'blur'}],
+				location: [{required: true, message: '位置不能为空', trigger: 'blur'}]
 			},
 			submitted: false
 		};

@@ -19,7 +19,7 @@
     </Row>
     <Row>
       <Page class="page" 
-      :total="100" show-elevator show-total show-sizer
+      v-bind:total="count" show-total show-elevator show-sizer
       @on-change="handlePageChange"
       @on-page-size-change="handlePageSizeChange"
       ></Page>
