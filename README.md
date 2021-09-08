@@ -14,6 +14,7 @@
 ```
 npm install vue-router axios
 npm install bootstrap-vue
+npm install iview --save
 ```
 
 ### Compiles and hot-reloads for development
