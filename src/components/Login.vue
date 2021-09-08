@@ -1,73 +1,61 @@
 <template>
-  <div class="submit-form">
-    <div v-if="!logged">
-    <h4 style="text-align: center ;margin: 20px">登录测试</h4>
-<!--      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">-->
-    <Row id="form1" type="flex"  align="middle">
+  <div>
+    <Form ref="formInline" :model="formInline" :rules="ruleInline" class="Login">
+      <img :src="imgUrl" width="300px" class="img">
+      <Form-item prop="user">
+        <Input type="text" v-model="formInline.username" placeholder="用户名">
+        </Input>
+      </Form-item>
+      <Form-item prop="password">
+        <Input type="password" v-model="formInline.password" placeholder="密码">
+        </Input>
+      </Form-item>
+      <Form-item prop="code">
+        <Input type="text" v-model="formInline.code" placeholder="验证码" style="width: 250px">
+        </Input>
+      </Form-item>
+      <Form-item>
+        <Button type="primary" class="loginBut" size="large" style="width: 100%" @click="login()">登录</Button>
+      </Form-item>
+      <div class="linkStyle">
+        <router-link to="/findP"><span>找回密码</span>
+        </router-link>
 
-      <i-col class="ivu-form-label-top">
-        <Form>
-          <Form-item  label="" prop="password">
-            <Input v-model="data.password" size="large" placeholder="请输入密码"></Input>
-          </Form-item>
-          <Form-item  label="" prop="username">
-            <Input v-model="data.username" size="large" placeholder="请输入账户"></Input>
-          </Form-item>
-        </Form>
+      </div>
 
-        <div id="btn" style="text-align:center">
-          <Button type="primary" size="large" @click="login">登录</Button>
-        </div>
 
-      </i-col>
-      </Row>
-    </div>
-    <div v-else>
-      <h4 style="margin: 100px auto">You submitted successfully!</h4>
-    </div>
+    </Form>
   </div>
 </template>
 
-import LoginService from "../services/LoginService";
-
 <script>
-import LoginService from "@/services/LoginService";
-//import Cookies from 'js-cookie'
-
+import LoginService from "../services/LoginService";
 export default {
-  name: "Login",
-  data() {
+  data () {
     return {
-      data: {
-        username: null,
-        password: null
+      imgUrl:require('/src/assets/11.png'),
+      formInline: {
+        username: '',
+        password: '',
+        code:''
       },
-      ruleValidate: {
+      ruleInline: {
         username: [
-          {required: true, message: '请输入用户名', trigger: 'blur'}
+          { required: true, message: '请填写用户名', trigger: 'blur' }
         ],
         password: [
-          {required: true, message: '请输入密码', trigger: 'blur'}
+          { required: true, message: '请填写密码', trigger: 'blur' },
+          { type: 'string', min: 5, message: '密码长度不能小于5位', trigger: 'blur' },
+        ],
+        code: [
+          { required: true, message: '请正确填写验证码', trigger: 'blur' }
         ]
-      },
-      logged: false
+      }
     }
   },
-
-
   methods: {
-    // checkLogin(){
-    //
-    //   //检查是否存在session
-    //   if(!this.getCookie('session')){
-    //     this.$router.push('/login');
-    //   }else{
-    //     this.$router.push('/');
-    //   }
-    // },
-
     login() {
-      LoginService.Login(this.data.username,this.data.password)
+      LoginService.Login(this.formInline.username,this.formInline.password)
           .then((response) => {
             if(response.status == 200) {
               //this.$cookies.set(this.data.username,this.data.password,7);
@@ -77,7 +65,32 @@ export default {
           })
     },
 
-
   }
 }
 </script>
+
+<style>
+.img{
+  margin-left: 45px;
+  margin-right: 45px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.linkStyle{
+  text-align: center;
+}
+.Login{
+  position: relative;
+  background-clip: padding-box;
+  margin:120px auto;
+  width:500px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 70px;
+  padding-right: 70px;
+  background:white;
+  border: 1px solid #7c91ab;
+  border-radius: 3px;
+}
+
+</style>
