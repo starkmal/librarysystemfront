@@ -37,6 +37,10 @@
               <Icon type="ios-person" :size="iconSize"></Icon>
               <span class="layout-text">个人中心</span>
             </Menu-item>
+            <Menu-item name="/login" class="item">
+              <Icon type="ios-person" :size="iconSize"></Icon>
+              <span class="layout-text">登录测试</span>
+            </Menu-item>
           </Menu>
         </i-col>
         <i-col class="layout-right" :class="{'layout-right-hidden': hidden === 1}">

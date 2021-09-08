@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+//import login from '@/components/login';
 
 Vue.use(Router);
 
@@ -37,6 +38,14 @@ export default new Router({
 			path: "/book/:id",
 			name: "Book-Detail",
 			component: () => import("./components/BookDetail")
-		}
+		},
+
+
+        {
+            path: "/login",
+            name: "Login",
+            meta: {show: true},
+            component: () => import("./components/Login"),
+        },
 	]
   });
