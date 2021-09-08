@@ -24,11 +24,6 @@ export default new Router({
             component: () => import("./components/Book"),
         },
         {
-            path: "/borrow",
-            name: "Borrow",
-            component: () => import("./components/Borrow")
-        },
-        {
             path: "/book/addbook",
             name: "AddBook",
             component: () => import("./components/AddBook")
@@ -37,6 +32,16 @@ export default new Router({
 			path: "/book/:id",
 			name: "Book-Detail",
 			component: () => import("./components/BookDetail")
-		}
+		},
+        {
+            path: "/borrow",
+            name: "Borrow",
+            component: () => import("./components/Borrow")
+        },
+        {
+            path: "/borrow/addborrow",
+            name: "AddBook",
+            component: () => import("./components/AddBorrow")
+        }
 	]
   });

@@ -5,7 +5,7 @@ class BookService {
 		return http.get("/book/search", {params});
 	}
 
-	get(isbn) {
+	async get(isbn) {
 		return http.get(`/book/${isbn}`);
 	}
 
@@ -19,16 +19,6 @@ class BookService {
 
 	delete(id) {
 		return http.delete(`/book/${id}`);
-	}
-
-	searchByTitle(title) {
-		return http.get(`/book?title=${title}`);
-	}
-	searchByIsbn(isbn) {
-		return http.get(`/book?isbn=${isbn}`);
-	}
-	searchByAuthor(author) {
-		return http.get(`/book?author=${author}`);
 	}
 }
 
