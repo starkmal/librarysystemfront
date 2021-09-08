@@ -21,17 +21,12 @@ class ReaderService {
         return http.delete(`/reader/${id}`);
     }
 
-    // 待添加
-    searchByName(name) {
+    getByName(name) {
         return http.get(`/reader?name=${name}`);
     }
 
-    searchByPhone(phone) {
+    getByPhone(phone) {
         return http.get(`/reader?phone=${phone}`);
-    }
-
-    searchByCredit(credit) {
-        return http.get(`/reader?credit=${credit}`);
     }
 }
 
