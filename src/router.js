@@ -41,7 +41,6 @@ export default new Router({
             name: "Login",
             meta: {show: true},
             component: () => import("./components/Login"),
-        },
 		},
         {
             path: "/borrow",
