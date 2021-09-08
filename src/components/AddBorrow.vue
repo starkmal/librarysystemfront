@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import BookInLibService from '../services/BookInLibService';
 import BorrowService from "../services/BorrowService";
 
 export default {
@@ -39,11 +40,15 @@ export default {
 	},
 	methods: {
     submit() {
-      this.data.borrow_time = Date();
+      this.data.borrow_time = new Date().getTime();
+      console.log(this.data);
 			BorrowService.create(this.data)
         .then(res => {
           console.log(res.data);
           this.submitted = true;
+          BookInLibService.setstate(this.data.book_id, "已借出")
+          .then()
+          .catch(e=>console.log(e));
         })
         .catch(e => {
           this.data = {};

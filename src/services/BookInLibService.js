@@ -13,6 +13,10 @@ class BookInLibService {
 		return http.put(`/repo/${id}`, data);
 	}
 
+	setstate(id, state) {
+		return http.put(`/repo?id=${id}&state=${state}`);
+	}
+
 	delete(id) {
 		return http.delete(`/repo/${id}`);
 	}
