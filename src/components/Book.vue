@@ -70,38 +70,46 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          render: (h) => {
-            return h('div',[
-                h('span', {
-                  style: {
-                    cursor: 'pointer',
-                    color: '#3399ff',
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push('/book/{$id}')
-                    }
-                  }
-                }, '编辑'),
-                h('span', '  |  '),
-                h('span', {
-                  style: {
-                    cursor: 'pointer',
-                    color: '#3399ff',
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push('/book/bookadd')
-                    }
-                  }
-                }, '删除')
-            ]);
+          render (row,column,index) {
+              console.log(column + index);
+              return `<i-button type="primary" size="small" @click="jump(${row.isbn})">查看</i-button>`;
           }
+          // render: (h) => {
+          //   return h('div',[
+          //       h('span', {
+          //         style: {
+          //           cursor: 'pointer',
+          //           color: '#3399ff',
+          //         },
+          //         on: {
+          //           click: () => {
+          //             this.$router.push('/book/${isbn}')
+          //           }
+          //         }
+          //       }, '编辑'),
+          //       h('span', '  |  '),
+          //       h('span', {
+          //         style: {
+          //           cursor: 'pointer',
+          //           color: '#3399ff',
+          //         },
+          //         on: {
+          //           click: () => {
+          //             this.$router.push('/book/bookadd')
+          //           }
+          //         }
+          //       }, '删除')
+          //   ]);
+          // }
         }
       ]
     }
   },
   methods: {
+    jump(isbn) {
+      console.log(isbn);
+      this.$router.push("/book/${isbn}");
+    },
     addBook() {
       this.$router.push('/book/addbook')
     },

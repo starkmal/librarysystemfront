@@ -25,11 +25,6 @@ export default new Router({
             component: () => import("./components/Book"),
         },
         {
-            path: "/borrow",
-            name: "Borrow",
-            component: () => import("./components/Borrow")
-        },
-        {
             path: "/book/addbook",
             name: "AddBook",
             component: () => import("./components/AddBook")
@@ -47,5 +42,16 @@ export default new Router({
             meta: {show: true},
             component: () => import("./components/Login"),
         },
+		},
+        {
+            path: "/borrow",
+            name: "Borrow",
+            component: () => import("./components/Borrow")
+        },
+        {
+            path: "/borrow/addborrow",
+            name: "AddBook",
+            component: () => import("./components/AddBorrow")
+        }
 	]
   });
