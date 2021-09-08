@@ -14,6 +14,7 @@
 ```
 npm install vue-router axios
 npm install bootstrap-vue
+npm install js-cookie --save
 npm install iview --save
 ```
 
