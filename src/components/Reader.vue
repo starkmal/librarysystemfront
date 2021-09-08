@@ -73,33 +73,6 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          // render: (h) => {
-          //   return h('div',[
-          //       h('span', {
-          //         style: {
-          //           cursor:'pointer',
-          //           color:'#3399ff',
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.$router.push('/reader/{$id}')
-          //           }
-          //         }
-          //       }, '编辑'),
-          //       h('span', '  |  '),
-          //       h('span', {
-          //         style: {
-          //           cursor: 'pointer',
-          //           color: '#3399ff',
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.$router.push('/reader/readeradd')
-          //           }
-          //         }
-          //       }, '删除')
-          //   ]);
-          // }
           render (row,column,index) {
             console.log(column + index);
             return `<i-button type="primary" size="small" >查看</i-button>`;
@@ -117,7 +90,7 @@ export default {
       let params = {};
 
       if (this.searchTitle) {
-        params[this.title] = this.searchTitle;
+        params[this.select] = this.searchTitle;
       }
 
       if(this.page) {
@@ -142,11 +115,12 @@ export default {
             this.tabledata = [];
             for(let i = 0;i < this.readers.length;i ++) {
               this.tabledata.push({
-                rid: this.readers[i].id,
+                id: this.readers[i].id,
                 name: this.readers[i].name,
                 phone: this.readers[i].phone
               })
             }
+            this.count = totalItems;
             console.log(this.readers);
           })
           .catch((e) => {
@@ -157,14 +131,14 @@ export default {
     handlePageChange(value) {
       console.log(value);
       this.page = value;
-      // this.retrieveReaders()
+      this.retrieveReaders();
     },
 
     handlePageSizeChange(value) {
       console.log(value);
       this.pageSize = value;
       this.page = 1;
-      // this.retrieveReaders()
+      this.retrieveReaders();
     }
   }
 }
