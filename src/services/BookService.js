@@ -1,6 +1,10 @@
 import http from "../http-common";
 
 class BookService {
+	getTop() {
+		return http.get(`/book/top`);
+	}
+
 	getAll(params) {
 		return http.get("/book/search", {params});
 	}

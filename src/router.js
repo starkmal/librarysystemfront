@@ -29,13 +29,21 @@ export default new Router({
             name: "AddBook",
             component: () => import("./components/AddBook")
         },
+        {
+            path: "/reader/addreader",
+            name: "AddReader",
+            component: () => import("./components/AddReader")
+        },
 		{
 			path: "/book/:id",
 			name: "Book-Detail",
 			component: () => import("./components/BookDetail")
 		},
-
-
+        {
+            path: "/reader/:id",
+            name: "Reader-Detail",
+            component: () => import("./components/ReaderDetail")
+        },
         {
             path: "/login",
             name: "Login",

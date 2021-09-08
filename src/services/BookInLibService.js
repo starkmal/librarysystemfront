@@ -16,9 +16,19 @@ class BookInLibService {
 	setstate(id, state) {
 		return http.put(`/repo?id=${id}&state=${state}`);
 	}
+	changestate(id) {
+		return http.put(`/repo?id=${id}`);
+	}
 
 	delete(id) {
 		return http.delete(`/repo/${id}`);
+	}
+
+	countBorrowed() {
+		return http.get(`/repo/countBorrowed`);
+	}
+	countAll() {
+		return http.get(`/repo/count`);
 	}
 }
 

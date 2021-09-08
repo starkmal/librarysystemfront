@@ -1,12 +1,18 @@
 <template>
   <div class="book">
+    <div class="layout-breadcrumb">
+      <Breadcrumb>
+        <Breadcrumb-item to="/">首页</Breadcrumb-item>
+        <Breadcrumb-item>借阅管理</Breadcrumb-item>
+      </Breadcrumb>
+    </div>
     <Row type="flex" justify="space-around" class="code-row-bg">
       <i-col class="search">
-        <Input v-model="searchTitle" size="large" placeholder="  查询图书">
+        <Input v-model="searchTitle" size="large" placeholder="  查询借阅记录">
           <Select v-model="select" slot="prepend" style="width: 80px">
             <Option value="isbn">ISBN</Option>
             <Option value="title">书名</Option>
-            <Option value="readername">读者</Option>
+            <Option value="readername">读者用户名</Option>
           </Select>
           <Button slot="append" icon="ios-search"
           @click="page = 1; retrieveBorrows();"
@@ -33,6 +39,7 @@
 <script>
 import AddBorrow from "@/components/AddBorrow";
 import BorrowService from "../services/BorrowService";
+import BookInLibService from '../services/BookInLibService';
 
 export default {
   name: "Book",
@@ -72,45 +79,50 @@ export default {
           key: 'time'
         },
         {
+          title: '归还时间',
+          key: 'rtime'
+        },
+        {
           title: '操作',
           key: 'action',
           align: 'center',
-          render (row,column,index) {
-              console.log(column + index);
-              return `<i-button type="primary" size="small" >查看</i-button>`;
+          render: (h, params) => {
+            return h('span', {
+                  style: {
+                    cursor: 'pointer',
+                    color: '#3399ff',
+                  },
+                  on: {
+                    click: () => {
+                      this.finishborrow(params.row);
+                    }
+                  }
+                }, '完成');
           }
-          // render: (h) => {
-          //   return h('div',[
-          //       h('span', {
-          //         style: {
-          //           cursor: 'pointer',
-          //           color: '#3399ff',
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.$router.push('/book/${isbn}')
-          //           }
-          //         }
-          //       }, '编辑'),
-          //       h('span', '  |  '),
-          //       h('span', {
-          //         style: {
-          //           cursor: 'pointer',
-          //           color: '#3399ff',
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.$router.push('/book/bookadd')
-          //           }
-          //         }
-          //       }, '删除')
-          //   ]);
-          // }
         }
       ]
     }
   },
   methods: {
+    finishborrow(borrow) {
+      if (borrow.rtime != null) {
+        alert('该条目已经完成！');
+        return;
+      }
+      console.log(borrow);
+      let data = {
+        id: borrow.id,
+        time: new Date().getTime()
+      };
+      BorrowService.update(data)
+      .then(() => {
+        this.retrieveBorrows();
+        BookInLibService.changestate(borrow.bid)
+        .then()
+        .catch(e=>console.log(e));
+      })
+      .catch(e => console.log(e));
+    },
     addBorrow() {
       this.$router.push('/borrow/addborrow')
     },
@@ -144,11 +156,13 @@ export default {
           this.tabledata = [];
           for (let i = 0; i < this.borrows.length; i ++) {
             this.tabledata.push({
+              id: this.borrows[i].id,
               bid: this.borrows[i].book.id,
               isbn: this.borrows[i].book.book.isbn,
               title: this.borrows[i].book.book.title,
               name: this.borrows[i].reader.name,
-              time: this.borrows[i].borrowTime
+              time: this.borrows[i].borrowTime,
+              rtime: this.borrows[i].returnTime
             })
           }
           console.log(this.borrows);

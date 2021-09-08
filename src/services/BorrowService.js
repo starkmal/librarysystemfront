@@ -1,6 +1,9 @@
 import http from "../http-common";
 
-class BookService {
+class BorrowService {
+	getRecent() {
+		return http.get(`/borrow/recent`);
+	}
 	getAll(params) {
 		return http.get("/borrow/search", {params});
 	}
@@ -13,14 +16,17 @@ class BookService {
 		return http.post("/borrow", data);
 	}
 
-	update(id, data) {
-		return http.put(`/borrow/${id}`, data);
+	update(data) {
+		return http.put(`/borrow`, data);
 	}
 
 	delete(id) {
 		return http.delete(`/borrow/${id}`);
 	}
 
+	countToday() {
+		return http.get(`/borrow/count`);
+	}
 }
 
-export default new BookService();
+export default new BorrowService();

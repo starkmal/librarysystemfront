@@ -1,4 +1,12 @@
 <template>
+  <div>
+  <div class="layout-breadcrumb">
+    <Breadcrumb>
+      <Breadcrumb-item to="/">首页</Breadcrumb-item>
+      <Breadcrumb-item to="/book">图书管理</Breadcrumb-item>
+      <Breadcrumb-item>书籍详情</Breadcrumb-item>
+    </Breadcrumb>
+  </div>
   <div style="margin: 20px 40px 10px">
     <h4>《{{book.title}}》</h4>
     <Row type="flex" class="info">
@@ -7,38 +15,38 @@
       </i-col>
       <i-col id="2" span="2">
         <p>作者：</p>
-        <p>出版社：</p>
+        <p>定价：</p>
         <p>出版年：</p>
         <p>简介：</p>
       </i-col>
       <i-col id="3" span="6">
         <div v-if="!edit">
-          <p>{{book.author.name}}</p>
-          <p>{{book.publisher}}</p>
-          <p>{{book.year}}</p>
-          <p>{{book.description}}</p>
+          <p>&nbsp;{{book.author.name}}</p>
+          <p>&nbsp;{{book.price}}</p>
+          <p>&nbsp;{{book.year}}</p>
+          <p>&nbsp;{{book.description}}</p>
         </div>
         <div v-else style="width: 80%">
-          <Input v-model="book.author"/>
-          <Input v-model="book.publisher"/>
+          <p>&nbsp;{{book.author.name}}</p>
+          <Input v-model="book.price"/>
           <Input v-model="book.year"/>
           <Input v-model="book.description"/>
         </div>
       </i-col>
       <i-col id="4" span="2">
-        <p>定价：</p>
         <p>ISBN：</p>
+        <p>出版社：</p>
         <p>推荐指数：</p>
       </i-col>
       <i-col id="5" span="6">
         <div v-if="!edit">
-          <p>{{book.price}}</p>
-          <p>{{book.isbn}}</p>
-          <p>{{book.popularity}}</p>
+          <p>&nbsp;{{book.isbn}}</p>
+          <p>&nbsp;{{book.publisher}}</p>
+          <p>&nbsp;{{book.popularity}}</p>
         </div>
         <div v-else style="width: 80%">
-          <Input v-model="book.price"/>
-          <Input v-model="book.isbn"/>
+          <p>{{book.isbn}}</p>
+          <Input v-model="book.publisher"/>
           <Input v-model="book.popularity"/>
         </div>
       </i-col>
@@ -52,38 +60,35 @@
     <Row id="page">
       <Page class="page" :total="book.repo.length" show-elevator show-total page-size="3" @on-change="changePage"></Page>
     </Row>
-    <Table stripe border :columns="column" :data="tabledata">
+    <Table stripe border :context="self" :columns="column" :data="tabledata">
     </Table>
+  </div>
   </div>
 </template>
 
 <script>
+import BookInLibService from '../services/BookInLibService';
 import BookService from "../services/BookService";
 
 export default {
   name: "book",
   data() {
     return {
+      img: require("/assets/s33734103.jpg"),
       edit: false,
       book: null,
       tabledata: [],
+      page: null,
       message: "",
+      self: this,
       column: [
         {
           title: 'BID',
           key: 'id'
         },
         {
-          title: 'ISBN',
-          key: 'isbn'
-        },
-        {
-          title: '作品名称',
-          key: 'title'
-        },
-        {
-          title: '作者',
-          key: 'author',
+          title: '位置',
+          key: 'location',
           sortable: true
         },
         {
@@ -92,15 +97,11 @@ export default {
           sortable: true
         },
         {
-          title: '借出时间',
-          key: '111',
-          sortable: true
-        },
-        {
           title: '操作',
           key: 'action',
           align: 'center',
-          render: (h) => {
+          render: (h, params) => {
+            let row = params.row;
             return h('span', {
               style: {
                 cursor: 'pointer',
@@ -108,24 +109,42 @@ export default {
               },
               on: {
                 click: () => {
-                  this.$router.push('/book/{$id}')
+                  this.changeState(row.id);
                 }
               }
-            }, '删除');
+            }, '更改状态');
           }
         }
       ]
     };
   },
   methods: {
+    async changeState(id) {
+      console.log(id);
+      BookInLibService.changestate(id)
+      .then(()=>{
+        BookService.get(this.book.isbn)
+        .then((res) => {
+          this.book = res.data;
+          this.changePage(this.page);
+          console.log(res.data);
+        })
+        .catch((e) => console.log(e));
+      })
+      .catch(e=>console.log(e));
+    },
     changeEdit() {
       if(this.edit === false) {
         this.edit = true;
       } else {
+        BookService.update(this.book.isbn, this.book)
+        .then(res => console.log(res))
+        .catch(e => console.log(e));
         this.edit = false;
       }
     },
     changePage(index) {
+      this.page = index;
       this.tabledata = this.book.repo.slice((index-1) * 3, index * 3);
       console.log(this.tabledata);  
     },

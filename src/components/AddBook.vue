@@ -1,4 +1,12 @@
 <template>
+  <div>
+	<div class="layout-breadcrumb">
+    <Breadcrumb>
+      <Breadcrumb-item to="/">首页</Breadcrumb-item>
+      <Breadcrumb-item to="/book">图书管理</Breadcrumb-item>
+      <Breadcrumb-item>新建书籍</Breadcrumb-item>
+    </Breadcrumb>
+  </div>
   <div class="submit-form">
       <div v-if="!submitted">
         <h4 style="text-align: center ;margin: 20px">新书入库</h4>
@@ -57,6 +65,7 @@
         <h4 style="margin: 100px auto">You submitted successfully!</h4>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
