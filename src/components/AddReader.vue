@@ -1,30 +1,38 @@
 <template>
-  <div class="submit-form">
-    <div v-if="!submitted">
-      <h4 style="text-align: center; margin: 20px">添加新读者</h4>
-      <Row id="form1" type="flex" gutter="40">
-        <i-col class="form-left">
-          <Form ref="data.reader" :model="data.reader" :rules="ruleValidate" :label-width="80">
-            <Form-item label="读者ID" prop="id">
-              <Input v-model="data.reader.id" size="large" placeholder="请输入读者ID"></Input>
-            </Form-item>
-            <Form-item label="姓名" prop="name">
-              <Input v-model="data.reader.name" size="large" placeholder="请输入姓名"></Input>
-            </Form-item>
-            <Form-item label="联系方式" prop="phone">
-              <Input v-model="data.reader.phone" size="large" placeholder="请输入联系方式"></Input>
-            </Form-item>
-          </Form>
-        </i-col>
-      </Row>
-      <div id="btn" style="text-align:center">
-        <Button type="primary" size="large" @click="submit">提交</Button>
+  <div>
+    <div class="layout-breadcrumb">
+      <Breadcrumb>
+        <Breadcrumb-item to="/">首页</Breadcrumb-item>
+        <Breadcrumb-item to="/reader">读者管理</Breadcrumb-item>
+        <Breadcrumb-item>添加读者</Breadcrumb-item>
+      </Breadcrumb>
+    </div>
+    <div class="submit-form">
+      <div v-if="!submitted">
+        <h4 style="text-align: center; margin: 20px">添加新读者</h4>
+        <Row id="form1" type="flex" gutter="40">
+          <i-col class="form-left">
+            <Form ref="data.reader" :model="data.reader" :rules="ruleValidate" :label-width="80">
+              <Form-item label="姓名" prop="name">
+                <Input v-model="data.reader.name" size="large" placeholder="请输入姓名"></Input>
+              </Form-item>
+              <Form-item label="联系方式" prop="phone">
+                <Input v-model="data.reader.phone" size="large" placeholder="请输入联系方式"></Input>
+              </Form-item>
+            </Form>
+          </i-col>
+        </Row>
+        <div id="btn" style="text-align:center">
+          <Button type="primary" size="large" @click="submit">提交</Button>
+        </div>
+      </div>
+      <div v-else>
+        <h4 style="margin: 100px auto">You submitted successfully!</h4>
+        <!--      <h4 style="margin: 100px auto">Your ID is</h4>-->
       </div>
     </div>
-    <div v-else>
-      <h4 style="margin: 100px auto">You submitted successfully!</h4>
-    </div>
   </div>
+
 </template>
 
 <script>
@@ -42,9 +50,6 @@ export default {
         }
       },
       ruleValidate: {
-        id: [
-          {required: true, message: '读者ID不能为空', trigger: 'blur'},
-        ],
         name:[{required: true, message: '姓名不能为空', trigger: 'blur'}],
         phone:[{required: true, message: '联系方式不能为空', trigger: 'blur'}]
       },
@@ -63,7 +68,7 @@ export default {
       .then(() => this.step2()) //(学号不能重复)
       .catch(()=>{
         let param = {
-          id: this.data.reader.id,
+          // id: this.data.reader.id,
           name: this.data.reader.name,
           phone: this.data.reader.phone,
         };
