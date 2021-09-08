@@ -1,6 +1,9 @@
 import http from "../http-common";
 
 class BorrowService {
+	getRecent() {
+		return http.get(`/borrow/recent`);
+	}
 	getAll(params) {
 		return http.get("/borrow/search", {params});
 	}
@@ -21,6 +24,9 @@ class BorrowService {
 		return http.delete(`/borrow/${id}`);
 	}
 
+	countToday() {
+		return http.get(`/borrow/count`);
+	}
 }
 
 export default new BorrowService();

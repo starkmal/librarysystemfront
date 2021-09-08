@@ -23,6 +23,13 @@ class BookInLibService {
 	delete(id) {
 		return http.delete(`/repo/${id}`);
 	}
+
+	countBorrowed() {
+		return http.get(`/repo/countBorrowed`);
+	}
+	countAll() {
+		return http.get(`/repo/count`);
+	}
 }
 
 export default new BookInLibService();
