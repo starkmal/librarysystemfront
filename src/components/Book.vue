@@ -1,4 +1,11 @@
 <template>
+  <div>
+  <div class="layout-breadcrumb">
+    <Breadcrumb>
+      <Breadcrumb-item to="/">首页</Breadcrumb-item>
+      <Breadcrumb-item>图书管理</Breadcrumb-item>
+    </Breadcrumb>
+  </div>
   <div class="book">
     <Row type="flex" justify="space-around" class="code-row-bg">
       <i-col class="search">
@@ -27,6 +34,7 @@
     <Row class = "tables">
       <i-table stripe border :columns="column" :data="books"></i-table>
     </Row>
+  </div>
   </div>
 </template>
 
@@ -70,46 +78,39 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          render (row,column,index) {
-              console.log(column + index);
-              return `<i-button type="primary" size="small" @click="jump(${row.isbn})">查看</i-button>`;
+          render: (h, params) => {
+            let row = params.row;
+            return h('div',[
+                h('span', {
+                  style: {
+                    cursor: 'pointer',
+                    color: '#3399ff',
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push(`/book/${row.isbn}`);
+                    }
+                  }
+                }, '编辑'),
+                h('span', '  |  '),
+                h('span', {
+                  style: {
+                    cursor: 'pointer',
+                    color: '#3399ff',
+                  },
+                  on: {
+                    click: () => {
+                      this.$router.push('/book/bookadd')
+                    }
+                  }
+                }, '删除')
+            ]);
           }
-          // render: (h) => {
-          //   return h('div',[
-          //       h('span', {
-          //         style: {
-          //           cursor: 'pointer',
-          //           color: '#3399ff',
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.$router.push('/book/${isbn}')
-          //           }
-          //         }
-          //       }, '编辑'),
-          //       h('span', '  |  '),
-          //       h('span', {
-          //         style: {
-          //           cursor: 'pointer',
-          //           color: '#3399ff',
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.$router.push('/book/bookadd')
-          //           }
-          //         }
-          //       }, '删除')
-          //   ]);
-          // }
         }
       ]
     }
   },
   methods: {
-    jump(isbn) {
-      console.log(isbn);
-      this.$router.push("/book/${isbn}");
-    },
     addBook() {
       this.$router.push('/book/addbook')
     },

@@ -25,10 +25,6 @@
               <Icon type="ios-paper" :size="iconSize"></Icon>
               <span class="layout-text">借阅管理</span>
             </Menu-item>
-            <Menu-item name="/reserve" class="item">
-              <Icon type="ios-chatboxes" :size="iconSize"></Icon>
-              <span class="layout-text">预约管理</span>
-            </Menu-item>
             <Menu-item name="/setting" class="item">
               <Icon type="ios-settings" :size="iconSize"></Icon>
               <span class="layout-text">系统设置</span>
@@ -49,13 +45,6 @@
                 <Dropdown-item>退出登录</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
-          </div>
-          <div class="layout-breadcrumb">
-            <Breadcrumb>
-              <Breadcrumb-item href="#">首页</Breadcrumb-item>
-              <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-              <Breadcrumb-item>某应用</Breadcrumb-item>
-            </Breadcrumb>
           </div>
           <div class="layout-content">
             <div>

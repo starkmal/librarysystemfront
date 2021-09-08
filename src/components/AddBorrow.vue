@@ -1,7 +1,15 @@
 <template>
+  <div>
+  <div class="layout-breadcrumb">
+    <Breadcrumb>
+      <Breadcrumb-item to="/">首页</Breadcrumb-item>
+      <Breadcrumb-item to="/borrow">借阅管理</Breadcrumb-item>
+      <Breadcrumb-item>新建借阅</Breadcrumb-item>
+    </Breadcrumb>
+  </div>
   <div class="submit-form">
       <div v-if="!submitted">
-        <Alert v-if="error">输入的图书/读者编号不存在！</Alert>
+        <Alert v-if="error">输入的图书/读者编号不存在！或者图书已被借出！</Alert>
         <h4 style="text-align: center ;margin: 20px">新建借阅</h4>
         <Form ref="data" :model="data" :rules="ruleValidate" :label-width="80">
           <Form-item label="图书编号" prop="book_id">
@@ -18,6 +26,7 @@
       <div v-else>
         <h4 style="margin: 100px auto">提交成功</h4>
       </div>
+    </div>
     </div>
 </template>
 
