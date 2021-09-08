@@ -5,9 +5,7 @@
         <Card class="card1">
           <div style="text-align: left">
             <h4>未归还总量</h4>
-            <ul v-for="item in num" v-bind:key="item" class="dataNum">
-              <label>{{item.noReturn}}</label>
-            </ul>
+              <label>{{num.borrowed}}</label>
             <label></label>
           </div>
         </Card>
@@ -16,9 +14,7 @@
         <Card class="card1">
           <div style="text-align: left">
             <h4>本日借书人数</h4>
-            <ul v-for="item in num" v-bind:key="item" class="dataNum">
-              <label>{{item.peopleNum}}</label>
-            </ul>
+              <label>{{num.todayNum}}</label>
           </div>
         </Card>
       </i-Col>
@@ -26,9 +22,7 @@
         <Card class="card1">
           <div style="text-align: left">
             <h4>馆藏图书</h4>
-            <ul v-for="item in num" v-bind:key="item" class="dataNum">
-              <label>{{item.bookNum}}</label>
-            </ul>
+              <label>{{num.bookNum}}</label>
           </div>
         </Card>
       </i-Col>
@@ -36,9 +30,7 @@
         <Card class="card1">
           <div style="text-align: left">
             <h4>读者数量</h4>
-            <ul v-for="item in num" v-bind:key="item" class="dataNum">
-              <label>{{item.readerNum}}</label>
-            </ul>
+              <label>{{num.readerNum}}</label>
           </div>
         </Card>
       </i-Col>
@@ -51,8 +43,8 @@
             <Icon type="ios-cart"></Icon>
             近期借阅
           </p>
-          <ul  v-for="item in readerList" v-bind:key="item" class="a">
-              <a>{{item.readerid}}</a>
+          <ul  v-for="item in borrowList" v-bind:key="item" class="a">
+              <a>{{item.readername}}</a>
               <label class="po">{{item.bookname}}</label>
           </ul>
         </Card>
@@ -88,7 +80,10 @@
   </div>
 </template>
 <script>
-
+import BookInLibService from '../services/BookInLibService'
+import BookService from '../services/BookService'
+import BorrowService from '../services/BorrowService'
+import ReaderService from '../services/ReaderService'
 import shadowChart from './shadowChart'
 export default {
 components: {
@@ -96,52 +91,60 @@ components: {
 },
   data() {
     return {
-      bookList: [
-        {
-          name: '',
-          popularity: '22222',
-        },
-        {
-          name: '1212',
-          popularity: '22222',
-        },
-        {
-          name: '1212',
-          popularity: '22222',
-        },
-        {
-          name: '1212',
-          popularity: '22222',
-        },
-        {
-          name: '1212',
-          popularity: '22222',
-        },
-        {
-          name: '1212',
-          popularity: '22222',
-        }, {
-          name: '1212',
-          popularity: '22222',
-        }, {
-          name: '1212',
-          popularity: '22222',
-        },
-      ],
-      num:[{
-        noReturn:'20',
-        peopleNum:'3',
-        bookNum:'500',
-        readerNum:'100',
+      bookList: [],
+      borrowList: [],
+      num:{
+        borrowed: null,
+        todayNum: null,
+        bookNum: null,
+        readerNum: null,
       }
-    ],
-      readerList:[{
-        bookname:'2222',
-        readerid:'21212',
-      }]
-
     }
   },
+  methods: {
+    retrieveData() {
+      BookService.getTop()
+      .then(res => {
+        for (let i = 0; i < res.data.length; i ++) {
+          this.bookList.push({
+            name: res.data[i].title,
+            popularity: res.data[i].popularity
+          });
+        }
+      })
+      .catch(e => console.log(e));
+
+      BorrowService.getRecent()
+      .then(res=> {
+        for (let i = 0; i < res.data.length; i ++) {
+          this.borrowList.push({
+            readername: res.data[i].reader.name,
+            bookname: res.data[i].book.book.title
+          });
+        }
+      })
+      .catch(e => console.log(e));
+
+      BookInLibService.countBorrowed()
+      .then(res => this.num.borrowed = res.data)
+      .catch(e => console.log(e));
+
+      BorrowService.countToday()
+      .then(res => this.num.todayNum = res.data)
+      .catch(e => console.log(e));
+
+      BookInLibService.countAll()
+      .then(res => this.num.bookNum = res.data)
+      .catch(e => console.log(e));
+
+      ReaderService.countAll()
+      .then(res => this.num.readerNum = res.data)
+      .catch(e => console.log(e));
+    }
+  },
+  mounted() {
+    this.retrieveData();
+  }
 }
 </script>
 <style>

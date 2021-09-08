@@ -28,6 +28,10 @@ class ReaderService {
     getByPhone(phone) {
         return http.get(`/reader?phone=${phone}`);
     }
+
+    countAll() {
+        return http.get(`/reader/count`);
+    }
 }
 
 export default new ReaderService();
