@@ -5,7 +5,7 @@ class ReaderService {
         return http.get("/reader/search", {params});
     }
 
-    get(id) {
+    async get(id) {
         return http.get(`/reader/${id}`);
     }
 

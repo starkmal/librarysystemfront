@@ -11,9 +11,6 @@
     <div style="margin: 20px 40px 10px">
       <h4>读者详情</h4>
       <Row type="flex" class="info">
-<!--        <i-col id="1" span="3" style="text-align: left">-->
-<!--          <img :src="img" height="150px"/>-->
-<!--        </i-col>-->
         <i-col id="2" span="2">
           <p>姓名：</p>
           <p>联系方式：</p>
@@ -34,7 +31,7 @@
         </i-col>
       </Row>
           <Row id="page">
-            <Page class="page" :total="borrow.repo.length" show-elevator show-total page-size="3" @on-change="changePage"></Page>
+            <Page class="page" :total="reader.borrows.length" show-elevator show-total page-size="3" @on-change="changePage"></Page>
           </Row>
           <Table stripe border :context="self" :columns="column" :data="tabledata">
           </Table>
@@ -54,10 +51,6 @@ export default {
       borrow: null,
       tabledata: [],
       column: [
-        {
-          title: "ID",
-          key: 'id'
-        },
         {
           title: 'BID',
           key: 'bid'
@@ -94,9 +87,8 @@ export default {
     };
   },
   methods: {
-    // 粗糙ing
     changeEdit() {
-      if(this.edit == false) {
+      if(this.edit === false) {
         this.edit = true;
       } else {
         ReaderService.update(this.reader.id, this.reader)
@@ -120,8 +112,8 @@ export default {
     }
   },
   async mounted() {
-    this.message = "";
     await this.getReader(this.$route.params.id);  //获取读者id
+    this.changePage(1);
   }
 }
 </script>
