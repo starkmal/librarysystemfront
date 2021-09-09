@@ -8,7 +8,6 @@
     </Breadcrumb>
   </div>
   <div class="submit-form">
-      <div v-if="!submitted">
         <Alert v-if="error">输入的图书/读者编号不存在！或者图书已被借出！</Alert>
         <h4 style="text-align: center ;margin: 20px">新建借阅</h4>
         <Form ref="data" :model="data" :rules="ruleValidate" :label-width="80">
@@ -22,10 +21,6 @@
         <div id="btn" style="text-align:center">
           <Button type="primary" size="large" @click="submit">提交</Button>
         </div>
-      </div>
-      <div v-else>
-        <h4 style="margin: 100px auto">提交成功</h4>
-      </div>
     </div>
     </div>
 </template>
@@ -43,20 +38,18 @@ export default {
         book_id: null,
         borrow_time: null
       },
-      error: false,
-			submitted: false
+      error: false
 		};
 	},
 	methods: {
     submit() {
-      this.data.borrow_time = new Date().getTime();
+      this.data.borrow_time = new Date().getTime() + 28800000;
       console.log(this.data);
 			BorrowService.create(this.data)
         .then(res => {
           console.log(res.data);
-          this.submitted = true;
           BookInLibService.setstate(this.data.book_id, "已借出")
-          .then()
+          .then(()=>this.submitted())
           .catch(e=>console.log(e));
         })
         .catch(e => {
@@ -64,7 +57,14 @@ export default {
           this.error = true;
           console.log(e);
         });
+    },
+    submitted() {
+			this.$Message.success('创建成功！');
+			this.$router.push(`/borrow`);
     }
+  },
+  created() {
+    this.data.book_id = this.$route.params.id;
   }
 }
 </script>
