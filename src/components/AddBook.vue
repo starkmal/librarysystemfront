@@ -205,9 +205,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .submit-form {
-	max-width: 800px;
+	max-width: 70%;
 	margin: 30px auto;
 }
 .form-left {
