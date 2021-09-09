@@ -103,7 +103,7 @@ export default {
   methods: {
     finishBorrow(borrow) {
       if (borrow.rtime != null) {
-        alert('该条目已经完成');
+        this.$Message.error('该条目已经完成');
         return;
       }
       console.log(borrow);
@@ -114,9 +114,12 @@ export default {
       BorrowService.update(data)
       .then(() => {
         BookInLibService.setstate(borrow.bid, "在库")
-        .then(() => this.getReader(this.id))
+        .then(() => {
+          this.$Message.success('归还成功！');
+          this.getReader(this.id);
+        })
         .catch(e=>console.log(e));
-        // .then(()=>this.$Message.success('归还成功！'))
+        // .then(()=>)
         // .catch(e=>console.log(e))
       })
     },

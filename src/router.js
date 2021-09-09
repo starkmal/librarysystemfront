@@ -59,6 +59,16 @@ export default new Router({
             path: "/borrow/addborrow",
             name: "AddBorrow",
             component: () => import("./components/AddBorrow")
+        },
+        {
+            path:"/people",
+            name:"people",
+            component: () => import("./components/People")
+        },
+        {
+            path:"/people/pwchange",
+            name:"changepassword",
+            component: () => import("./components/findP")
         }
 	]
   });
