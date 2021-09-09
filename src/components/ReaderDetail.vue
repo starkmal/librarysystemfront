@@ -41,9 +41,11 @@
 
 <script>
 import ReaderService from "@/services/ReaderService";
+import BorrowService from "@/services/BorrowService";
+import BookInLibService from "@/services/BookInLibService";
 
 export default {
-  name: "ReaderDetail",
+  name: "borrow",
   data() {
     return {
       reader:null,
@@ -65,6 +67,14 @@ export default {
           sortable: true
         },
         {
+          title: '借阅时间',
+          key: 'time'
+        },
+        {
+          title: '归还时间',
+          key: 'rtime'
+        },
+        {
           title: '操作',
           key: 'action',
           align: 'center',
@@ -77,16 +87,34 @@ export default {
               },
               on: {
                 click: () => {
-                  this.finishborrow(params.row.id);
+                  this.finishborrow(params.row.id)
                 }
               }
-            }, '完成');
+            }, '归还');
           }
         }
       ]
     };
   },
   methods: {
+    finishBorrow(borrow) {
+      if (borrow.rtime != null) {
+        alert('该条目已经完成');
+        return;
+      }
+      console.log(borrow);
+      let data = {
+        id: borrow.id,
+        time: new Date().getTime(),
+      };
+      BorrowService.update(data)
+      .then(() => {
+        this.retrieveBooks();
+        BookInLibService.changestate(borrow.bid)
+        .then()
+        .catch(e=>console.log(e));
+      })
+    },
     changeEdit() {
       if(this.edit === false) {
         this.edit = true;
@@ -99,9 +127,23 @@ export default {
     },
     changePage(index) {
       this.page = index;
-      this.tabledata = this.reader.repo.slice((index - 1) * 3, index * 3);
+      this.tabledata = this.reader.borrows.slice((index - 1) * 3, index * 3);
       console.log(this.tabledata);
     },
+
+    getAllBorrows() {
+      const params = this.getRequestParams();
+      ReaderService.getAll(params)
+      .then((res) => {
+        const {borrows, totalItems } = res.data;
+        this.borrows = borrows;
+        for(let  i = 0;i < this.borrows.length;i ++){
+          this.borrows[i].bid = this.borrows[i].id;
+          this.borrows[i].btitle = this.borrows[i].title;
+          this.borrows[i].btime = this.borrows[i].time;
+        }
+      })
+    }
     async getReader(id) {
       console.log(id);
       await ReaderService.get(id)
