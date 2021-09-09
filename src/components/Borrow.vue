@@ -8,7 +8,7 @@
     </div>
     <Row type="flex" justify="space-around" class="code-row-bg">
       <i-col class="search">
-        <Input v-model="searchTitle" size="large" placeholder="  查询借阅记录">
+        <Input v-model="searchTitle" size="large" placeholder="  查询借阅记录" @keydown.enter.native="retrieveBorrows">
           <Select v-model="select" slot="prepend" style="width: 80px">
             <Option value="isbn">ISBN</Option>
             <Option value="title">书名</Option>
@@ -51,7 +51,7 @@ export default {
   components: AddBorrow,
   data () {
     return {
-      select: 'isbn',
+      select: 'title',
       borrows: [],
       tabledata: [],
       currentBook: null,
