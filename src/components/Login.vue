@@ -82,8 +82,8 @@ export default {
 .Login{
   position: relative;
   background-clip: padding-box;
-  margin:120px auto;
   width:500px;
+  margin: 50px auto;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 70px;
