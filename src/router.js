@@ -39,8 +39,11 @@ export default new Router({
 			name: "Book-Detail",
 			component: () => import("./components/BookDetail")
 		},
-
-
+        {
+            path: "/reader/:id",
+            name: "Reader-Detail",
+            component: () => import("./components/ReaderDetail")
+        },
         {
             path: "/login",
             name: "Login",

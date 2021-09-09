@@ -73,9 +73,19 @@ export default {
           title: '操作',
           key: 'action',
           align: 'center',
-          render (row,column,index) {
-            console.log(column + index);
-            return `<i-button type="primary" size="small" >查看</i-button>`;
+          render: (h, params) => {
+            let row = params.row;
+            return h('span', {
+              style: {
+                cursor: 'pointer',
+                color: '#3399ff',
+              },
+              on: {
+                click: () => {
+                  this.$router.push(`/reader/${row.id}`);
+                }
+              }
+            }, '查看');
           }
         }
       ]
