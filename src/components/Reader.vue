@@ -11,7 +11,7 @@
         <Button type="primary" size="large" @click="addReader">+ 添加读者</Button>
       </i-col>
       <i-col class="search">
-        <Input v-model="searchTitle" size="large" placeholder="  查询读者">
+        <Input v-model="searchTitle" size="large" placeholder="  查询读者" @keydown.enter.native="retrieveReaders">
           <Select v-model="select" slot="prepend" style="width: 80px">
             <Option value="id">读者ID</Option>
             <Option value="name">姓名</Option>

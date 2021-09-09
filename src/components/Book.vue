@@ -13,7 +13,7 @@
         <Button type="primary" size="large" @click="addBook">+  新建图书</Button>
       </i-col>
       <i-col class="search">
-        <Input v-model="searchTitle" size="large" placeholder="  查询图书">
+        <Input v-model="searchTitle" size="large" placeholder="  查询图书" @keydown.enter.native="retrieveBooks">
           <Select v-model="select" slot="prepend" style="width: 80px">
             <Option value="isbn">ISBN</Option>
             <Option value="title">标题</Option>
@@ -49,7 +49,7 @@ export default {
   components: AddBook,
   data () {
     return {
-      select: 'isbn',
+      select: 'title',
       books: [],
       currentBook: null,
       currentIndex: -1,

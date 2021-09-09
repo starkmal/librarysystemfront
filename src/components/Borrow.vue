@@ -11,7 +11,7 @@
         <Button type="primary" size="large" @click="addBorrow">+ 新建借阅</Button>
       </i-col>
       <i-col class="search">
-        <Input v-model="searchTitle" size="large" placeholder="  查询借阅记录">
+        <Input v-model="searchTitle" size="large" placeholder="  查询借阅记录" @keydown.enter.native="retrieveBorrows">
           <Select v-model="select" slot="prepend" style="width: 80px">
             <Option value="isbn">ISBN</Option>
             <Option value="title">书名</Option>
