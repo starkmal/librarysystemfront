@@ -3,7 +3,7 @@
   <div class="layout-breadcrumb">
     <Breadcrumb>
       <Breadcrumb-item to="/">首页</Breadcrumb-item>
-      <Breadcrumb-item>读者管理</Breadcrumb-item>
+      <Breadcrumb-item>图书管理</Breadcrumb-item>
     </Breadcrumb>
   </div>
   <div class="book">
@@ -47,7 +47,7 @@ export default {
   components: AddBook,
   data () {
     return {
-      select: '',
+      select: 'isbn',
       books: [],
       currentBook: null,
       currentIndex: -1,

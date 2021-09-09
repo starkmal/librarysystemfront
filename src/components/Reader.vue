@@ -38,7 +38,7 @@ export default {
   components: AddReader,
   data () {
     return {
-      select: '',
+      select: 'id',
       readers: [],
       tabledata: [],
       currentReader: null,

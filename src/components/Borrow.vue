@@ -51,7 +51,7 @@ export default {
   components: AddBorrow,
   data () {
     return {
-      select: '',
+      select: 'isbn',
       borrows: [],
       tabledata: [],
       currentBook: null,

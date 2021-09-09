@@ -116,6 +116,8 @@ export default {
         BookInLibService.setstate(borrow.bid, "在库")
         .then(() => this.getReader(this.id))
         .catch(e=>console.log(e));
+        // .then(()=>this.$Message.success('归还成功！'))
+        // .catch(e=>console.log(e))
       })
     },
     changeEdit() {
