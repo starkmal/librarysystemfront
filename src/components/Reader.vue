@@ -127,7 +127,8 @@ export default {
               this.tabledata.push({
                 id: this.readers[i].id,
                 name: this.readers[i].name,
-                phone: this.readers[i].phone
+                phone: this.readers[i].phone,
+                credit: this.readers[i].credit
               })
             }
             this.count = totalItems;

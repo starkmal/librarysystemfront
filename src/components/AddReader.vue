@@ -8,7 +8,6 @@
       </Breadcrumb>
     </div>
     <div class="submit-form">
-      <div v-if="!submitted">
         <h4 style="text-align: center; margin: 20px">添加新读者</h4>
         <Row id="form1" type="flex" gutter="40">
           <i-col class="form-left">
@@ -26,11 +25,6 @@
           <Button type="primary" size="large" @click="submit">提交</Button>
         </div>
       </div>
-      <div v-else>
-        <h4 style="margin: 100px auto">You submitted successfully!</h4>
-        <!--      <h4 style="margin: 100px auto">Your ID is</h4>-->
-      </div>
-    </div>
   </div>
 
 </template>
@@ -52,8 +46,7 @@ export default {
       ruleValidate: {
         name:[{required: true, message: '姓名不能为空', trigger: 'blur'}],
         phone:[{required: true, message: '联系方式不能为空', trigger: 'blur'}]
-      },
-      submitted:false
+      }
     };
   },
   methods: {
@@ -64,9 +57,9 @@ export default {
       //   .then(() => this.step2())
       //   .catch(e=>console.log(e))
       // })
-      ReaderService.get(this.data.reader.id)
-      .then(() => this.step2()) //(学号不能重复)
-      .catch(()=>{
+      // ReaderService.get(this.data.reader.id)
+      // .then(() => this.$Message.error('已存在')) //(学号不能重复)
+      // .catch(()=>{
         let param = {
           // id: this.data.reader.id,
           name: this.data.reader.name,
@@ -76,13 +69,14 @@ export default {
         .then(res => {
           console.log(res.data);
           this.data.reader = res.data;
-          this.submitted=true;
+          this.submitted();
         })
         .catch(e=>console.log(e));
-      })
+      // })
     },
-    step2() {
-      alert("id不能重复")
+    submitted() {
+      this.$Message.success('创建成功!');
+      this.$router.push(`/reader/${this.data.reader.id}`);
     }
   }
 }

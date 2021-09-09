@@ -44,7 +44,7 @@
             近期借阅
           </p>
           <ul  v-for="item in borrowList" v-bind:key="item">
-              <label style="color: #464c5b; font-size: 16px">{{item.readername}}借阅了《{{item.bookname}}》</label>
+              <a @click="jumpReader(item.readerid)" style="color: #3399ff; font-size: 16px">{{item.readername}}借阅了《{{item.bookname}}》</a>
               <label style="color: #464c5b; font-size: 16px; float: right">{{item.time}} </label>
           </ul>
         </Card>
@@ -55,10 +55,10 @@
             <Icon type="ios-book"></Icon>
             热门图书
           </p>
-          <span class="a">书名</span>
-          <span class="po">推荐度</span>
+          <!-- <span class="a">书名</span>
+          <span class="po">推荐度</span> -->
           <ul v-for="item in bookList" v-bind:key="item" class="a">
-            <a @click="jump(item.isbn)" target="_blank">{{ item.name }}</a>
+            <a @click="jumpBook(item.isbn)" target="_blank">{{ item.name }}</a>
               <span class="po">
                   {{ item.popularity }}
               </span>
@@ -106,7 +106,10 @@ components: {
     }
   },
   methods: {
-    jump(isbn) {
+    jumpReader(id) {
+      this.$router.push(`/reader/${id}`);
+    },
+    jumpBook(isbn) {
       this.$router.push(`/book/${isbn}`);
     },
     retrieveData() {
@@ -126,6 +129,7 @@ components: {
       .then(res=> {
         for (let i = 0; i < res.data.length; i ++) {
           this.borrowList.push({
+            readerid: res.data[i].reader.id,
             readername: res.data[i].reader.name,
             bookname: res.data[i].book.book.title,
             time: new Date(res.data[i].borrowTime).toLocaleDateString()

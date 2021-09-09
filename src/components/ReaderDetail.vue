@@ -14,13 +14,18 @@
         <i-col id="2" span="2">
           <p>姓名：</p>
           <p>联系方式：</p>
-<!--          <p>信用：</p>-->
+          <p>信用：</p>
         </i-col>
         <i-col>
-          <div v-if="!edit">
+          <div v-if="!edit" style="width: 80%">
             <p>&nbsp;{{reader.name}}</p>
             <p>&nbsp;{{reader.phone}}</p>
-<!--            <p>&nbsp;{{reader.credit}}</p>-->
+           <p>&nbsp;{{reader.credit}}</p>
+          </div>
+          <div v-else style="width: 80%">
+            <Input v-model="reader.name"/>
+            <Input v-model="reader.phone"/>
+            <Input v-model="reader.credit"/>
           </div>
         </i-col>
         <i-col id="4" span="5">
@@ -31,7 +36,7 @@
         </i-col>
       </Row>
           <Row id="page">
-            <Page class="page" :total="reader.borrows.length" show-elevator show-total page-size="3" @on-change="changePage"></Page>
+            <Page class="page" :total="reader.borrows.length" show-elevator show-total :page-size="size" @on-change="changePage"></Page>
           </Row>
           <Table stripe border :context="self" :columns="column" :data="tabledata">
           </Table>
@@ -48,6 +53,9 @@ export default {
   name: "borrow",
   data() {
     return {
+      id: null,
+      page: 1,
+      size: 5,
       reader:null,
       edit: false,
       borrow: null,
@@ -62,24 +70,20 @@ export default {
           key: 'title'
         },
         {
-          title: '状态',
-          key: 'state',
+          title: '借阅时间',
+          key: 'time',
           sortable: true
         },
         {
-          title: '借阅时间',
-          key: 'time'
-        },
-        {
           title: '归还时间',
-          key: 'rtime'
+          key: 'rtime',
+          sortable: true
         },
         {
           title: '操作',
           key: 'action',
           align: 'center',
           render: (h, params) => {
-            let row = params.row;
             return h('span', {
               style: {
                 cursor: 'pointer',
@@ -87,7 +91,7 @@ export default {
               },
               on: {
                 click: () => {
-                  this.finishborrow(params.row.id)
+                  this.finishBorrow(params.row)
                 }
               }
             }, '归还');
@@ -105,13 +109,12 @@ export default {
       console.log(borrow);
       let data = {
         id: borrow.id,
-        time: new Date().getTime(),
+        time: new Date().getTime() + 28800000,
       };
       BorrowService.update(data)
       .then(() => {
-        this.retrieveBooks();
-        BookInLibService.changestate(borrow.bid)
-        .then()
+        BookInLibService.setstate(borrow.bid, "在库")
+        .then(() => this.getReader(this.id))
         .catch(e=>console.log(e));
       })
     },
@@ -127,35 +130,33 @@ export default {
     },
     changePage(index) {
       this.page = index;
-      this.tabledata = this.reader.borrows.slice((index - 1) * 3, index * 3);
+      let tmp = this.reader.borrows.slice((index - 1) * this.size, index * this.size);
+      this.tabledata = [];
+      for (let i = 0; i < tmp.length; i ++)
+        this.tabledata.push({
+          id: tmp[i].id,
+          bid: tmp[i].book.id,
+          title: tmp[i].book.book.title,
+          time: tmp[i].borrowTime,
+          rtime: tmp[i].returnTime
+        })
       console.log(this.tabledata);
     },
 
-    getAllBorrows() {
-      const params = this.getRequestParams();
-      ReaderService.getAll(params)
-      .then((res) => {
-        const {borrows, totalItems } = res.data;
-        this.borrows = borrows;
-        for(let  i = 0;i < this.borrows.length;i ++){
-          this.borrows[i].bid = this.borrows[i].id;
-          this.borrows[i].btitle = this.borrows[i].title;
-          this.borrows[i].btime = this.borrows[i].time;
-        }
-      })
-    }
-    async getReader(id) {
+    getReader(id) {
       console.log(id);
-      await ReaderService.get(id)
+      ReaderService.get(id)
       .then((res) => {
         this.reader = res.data;
+        this.changePage(this.page);
         console.log(res.data);
       })
     }
   },
-  async mounted() {
-    await this.getReader(this.$route.params.id);  //获取读者id
-    this.changePage(1);
+  mounted() {
+    this.page = 1;
+    this.id = this.$route.params.id;
+    this.getReader(this.id);
   }
 }
 </script>

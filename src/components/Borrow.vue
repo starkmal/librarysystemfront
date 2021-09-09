@@ -20,6 +20,10 @@
           ></Button>
         </Input>
       </i-col>
+      <i-col class="switch">
+        <span>仅显示未归还：</span>
+        <i-switch v-model="borrowed"></i-switch>
+      </i-col>
       <i-col class="add">
         <Button type="primary" size="large" @click="addBorrow">新建借阅</Button>
       </i-col>
@@ -53,6 +57,7 @@ export default {
       currentBook: null,
       currentIndex: -1,
       searchTitle: "",
+      borrowed: true,
 
       page: 1,
       count: 0,
@@ -143,6 +148,8 @@ export default {
         params["size"] = this.pageSize;
       }
 
+      params["borrowed"] = this.borrowed;
+
       return params;
     },
 
@@ -195,6 +202,9 @@ export default {
   margin: 40px 0 0;
 }
 .add{
+  margin: 40px 0 0;
+}
+.switch{
   margin: 40px 0 0;
 }
 .page{
