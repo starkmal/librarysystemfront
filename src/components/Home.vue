@@ -1,65 +1,69 @@
 <template>
-  <div>
-    <Row :gutter="16" style="margin-left: 20px;margin-top: 20px">
+  <div style="margin: 10px">
+    <Row :gutter="10">
       <i-Col span="6">
-        <Card class="card1">
+        <Card>
           <div style="text-align: left">
-            <h4>未归还总量</h4>
-              <label>{{num.borrowed}}</label>
-            <label></label>
+            <h5>未归还总量</h5>
+              <h3>{{num.borrowed}}</h3>
+            
           </div>
         </Card>
       </i-Col>
       <i-Col span="6">
-        <Card class="card1">
+        <Card>
           <div style="text-align: left">
-            <h4>本日借书人数</h4>
-              <label>{{num.todayNum}}</label>
+            <h5>本日借书人数</h5>
+              <h3>{{num.todayNum}}</h3>
           </div>
         </Card>
       </i-Col>
       <i-Col span="6">
-        <Card class="card1">
+        <Card>
           <div style="text-align: left">
-            <h4>馆藏图书</h4>
-              <label>{{num.bookNum}}</label>
+            <h5>馆藏图书</h5>
+              <h3>{{num.bookNum}}</h3>
           </div>
         </Card>
       </i-Col>
       <i-Col span="6">
-        <Card class="card1">
+        <Card>
           <div style="text-align: left">
-            <h4>读者数量</h4>
-              <label>{{num.readerNum}}</label>
+            <h5>读者数量</h5>
+              <h3>{{num.readerNum}}</h3>
           </div>
         </Card>
       </i-Col>
     </Row>
     <br>
-    <Row>
+    <Row :gutter="10">
       <i-Col span="8">
-        <Card class="cardSet">
-          <p slot="title" style="font-size: 20px">
+        <Card>
+          <p slot="title" style="font-size: 20px; margin: 7px 20px 7px">
             <Icon type="ios-cart"></Icon>
             近期借阅
           </p>
-          <ul  v-for="item in borrowList" v-bind:key="item" class="a">
-              <a>{{item.readername}}</a>
-              <label class="po">{{item.bookname}}</label>
+          <ul  v-for="item in borrowList" v-bind:key="item">
+              <label style="color: #464c5b; font-size: 16px">{{item.readername}}借阅了《{{item.bookname}}》</label>
+              <label style="color: #464c5b; font-size: 16px; float: right">{{item.time}} </label>
           </ul>
         </Card>
       </i-Col>
       <i-Col span="8">
-        <Card class="cardSet">
+        <Card>
           <p slot="title" style="font-size: 20px">
             <Icon type="ios-book"></Icon>
             热门图书
           </p>
-          <ul>
-            <li v-for="item in bookList" v-bind:key="item" class="a">
-              <a @click="jump(item.isbn)">{{item.name}}</a>
-              <label class="po">{{item.popularity}}</label>
-            </li>
+          <span class="a">书名</span>
+          <span class="po">推荐度</span>
+          <ul v-for="item in bookList" v-bind:key="item" class="a">
+            <a @click="jump(item.isbn)" target="_blank">{{ item.name }}</a>
+              <span class="po">
+                  {{ item.popularity }}
+              </span>
+            <!-- <a @click="jump(item.isbn)">{{item.name}}</a> -->
+            <!-- <label class="po">{{item.popularity}}</label> -->
           </ul>
         </Card>
       </i-Col>
@@ -123,7 +127,8 @@ components: {
         for (let i = 0; i < res.data.length; i ++) {
           this.borrowList.push({
             readername: res.data[i].reader.name,
-            bookname: res.data[i].book.book.title
+            bookname: res.data[i].book.book.title,
+            time: new Date(res.data[i].borrowTime).toLocaleDateString()
           });
         }
       })
@@ -152,16 +157,13 @@ components: {
 }
 </script>
 <style>
-.card1{
-  width: 250px;
-  height:100px;
-}
 .a{
-  margin: 8px;
   font-size: 17px;
+  color: #3399ff
 }
 .po{
   float: right;
+  color: rgb(253, 181, 44)
 }
 .dataNum{
   text-align: center;
