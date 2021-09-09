@@ -1,6 +1,6 @@
 <template>
   <div class="layout" :class="{'layout-hide-text': hidden === 1}">
-    <Row type="flex">
+    <Row type="flex" class="layout=items">
         <i-col class="layout-left" :class="{'layout-left-hidden': hidden === 1}">
           <div class="layout-logo-left" v-if="hidden" align="center">
             <img :src="img1" height="50px"/>
@@ -24,10 +24,6 @@
             <Menu-item name="/borrow" class="item">
               <Icon type="ios-paper" :size="iconSize"></Icon>
               <span class="layout-text">借阅管理</span>
-            </Menu-item>
-            <Menu-item name="/setting" class="item">
-              <Icon type="ios-settings" :size="iconSize"></Icon>
-              <span class="layout-text">系统设置</span>
             </Menu-item>
             <Menu-item name="/people" class="item">
               <Icon type="ios-person" :size="iconSize"></Icon>
@@ -69,7 +65,7 @@ export default {
   data () {
     return {
       hidden: 0,
-      username: "Eric",
+      username: "Administrator",
       img1: require("/assets/logo.png"),
       img2: require("/assets/logologo.png")
     }
@@ -96,21 +92,22 @@ export default {
 
 <style>
 .layout{
-  border: 1px solid #d7dde4;
   background: #f5f7f9;
   position: relative;
-  border-radius: 4px;
   overflow: hidden;
   height: 100%;
   width: 100%;
 }
+.layout-items{
+  height: 100%;
+}
 .layout-breadcrumb{
-  padding: 30px 30px 0;
+  padding: 20px 40px 0;
   font-size: 30px;
 }
 .layout-content{
   min-height: 550px;
-  margin: 10px 30px 10px;
+  margin: 30px 30px 10px;
   overflow: hidden;
   background: #fff;
   border-radius: 4px;
@@ -123,16 +120,20 @@ export default {
 .layout-left{
   background: #464c5b;
   width: 14%;
+  height: auto;
 }
 .layout-left-hidden{
   background: #464c5b;
   width: 5%;
+  height: auto;
 }
 .layout-right{
   width: 86%;
+  height: auto;
 }
 .layout-right-hidden{
   width: 95%;
+  height: auto;
 }
 .layout-header{
   height:40px;
@@ -151,7 +152,6 @@ export default {
 }
 .item{
   height: 60px;
-  font-size: 18px;
 }
 .mleft{
   text-align: left;
@@ -165,9 +165,16 @@ export default {
   font-size: 16px;
   cursor: pointer;
   padding: 7px;
+  margin: 0 10px 0;
 }
 .btn{
   cursor: pointer;
 }
-
+.search {
+  width: 50%;
+  margin: 40px 0 0;
+}
+.layout-text{
+  font-size: 18px;
+}
 </style>

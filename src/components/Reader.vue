@@ -1,6 +1,15 @@
 <template>
-  <div class = "reader">
-    <Row type="flex" justify="space-around" class = "code-row-bg">
+  <div>
+    <div class="layout-breadcrumb">
+    <Breadcrumb>
+      <Breadcrumb-item to="/">首页</Breadcrumb-item>
+      <Breadcrumb-item>读者管理</Breadcrumb-item>
+    </Breadcrumb>
+  </div>
+    <Row type="flex">
+      <i-col class="add">
+        <Button type="primary" size="large" @click="addReader">+ 添加读者</Button>
+      </i-col>
       <i-col class="search">
         <Input v-model="searchTitle" size="large" placeholder="  查询读者">
           <Select v-model="select" slot="prepend" style="width: 80px">
@@ -13,19 +22,18 @@
           ></Button>
         </Input>
       </i-col>
-      <i-col class="add">
-        <Button type="primary" size="large" @click="addReader">新增读者</Button>
-      </i-col>
     </Row>
+   
+    <Row class="tables">
+      <i-table stripe border :columns="column" :data="tabledata"></i-table>
+    </Row>
+    
     <Row>
       <Page class="page"
             v-bind:total="count" show-total show-elevator show-sizer
             @on-change="handlePageChange"
             @on-page-size-change="handlePageSizeChange"
       ></Page>
-    </Row>
-    <Row class = "tables">
-      <i-table stripe border :columns="column" :data="tabledata"></i-table>
     </Row>
   </div>
 </template>
@@ -38,7 +46,7 @@ export default {
   components: AddReader,
   data () {
     return {
-      select: '',
+      select: 'id',
       readers: [],
       tabledata: [],
       currentReader: null,
@@ -51,23 +59,19 @@ export default {
       column: [
         {
           title: 'id',
-          key: 'id',
-          align: 'center'
+          key: 'id'
         },
         {
           title: '姓名',
-          key: 'name',
-          align: 'center'
+          key: 'name'
         },
         {
           title: '联系方式',
-          key: 'phone',
-          align: 'center'
+          key: 'phone'
         },
         {
           title: '信用等级',
-          key: 'credit',
-          align: 'center'
+          key: 'credit'
         },
         {
           title: '操作',
@@ -155,24 +159,20 @@ export default {
 }
 </script>
 <style scoped>
-  .search {
-    width: 50%;
-    margin: 40px 0 0;
-  }
-  .add{
-    margin: 40px 0 0;
-  }
   .page{
     margin: 20px 40px 10px;
     float: right;
   }
-  .tables{
-    margin: 10px 40px 0;
-    border-radius: 10px;
-  }
+.tables{
+  margin: 30px 40px 0;
+  border-radius: 10px;
+}
   .show{
     text-align: center;
     color: #464c5b;
     cursor: pointer;
   }
+  .add{
+  margin: 40px 40px 0;
+}
 </style>

@@ -6,7 +6,10 @@
         <Breadcrumb-item>借阅管理</Breadcrumb-item>
       </Breadcrumb>
     </div>
-    <Row type="flex" justify="space-around" class="code-row-bg">
+    <Row type="flex">
+      <i-col class="add">
+        <Button type="primary" size="large" @click="addBorrow">+ 新建借阅</Button>
+      </i-col>
       <i-col class="search">
         <Input v-model="searchTitle" size="large" placeholder="  查询借阅记录">
           <Select v-model="select" slot="prepend" style="width: 80px">
@@ -21,12 +24,13 @@
         </Input>
       </i-col>
       <i-col class="switch">
-        <span>仅显示未归还：</span>
+        <span style="color: rgb(141,146,158); margin-right: 10px">仅显示未归还</span>
         <i-switch v-model="borrowed"></i-switch>
       </i-col>
-      <i-col class="add">
-        <Button type="primary" size="large" @click="addBorrow">新建借阅</Button>
-      </i-col>
+    </Row>
+    
+    <Row class = "tables">
+      <i-table stripe border :columns="column" :data="tabledata"></i-table>
     </Row>
     <Row>
       <Page class="page" 
@@ -34,9 +38,6 @@
       @on-change="handlePageChange"
       @on-page-size-change="handlePageSizeChange"
       ></Page>
-    </Row>
-    <Row class = "tables">
-      <i-table stripe border :columns="column" :data="tabledata"></i-table>
     </Row>
   </div>
 </template>
@@ -51,7 +52,7 @@ export default {
   components: AddBorrow,
   data () {
     return {
-      select: '',
+      select: 'title',
       borrows: [],
       tabledata: [],
       currentBook: null,
@@ -202,22 +203,18 @@ export default {
   margin: 40px 0 0;
 }
 .add{
-  margin: 40px 0 0;
+  margin: 40px 40px 0;
 }
 .switch{
-  margin: 40px 0 0;
+  margin: 45px 40px 0;
+  
 }
 .page{
   margin: 20px 40px 10px;
   float: right;
 }
 .tables{
-  margin: 10px 40px 0;
+  margin: 30px 40px 0;
   border-radius: 10px;
-}
-.show{
-  text-align: center;
-  color: #464c5b;
-  cursor: pointer;
 }
 </style>

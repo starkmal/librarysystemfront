@@ -3,11 +3,15 @@
   <div class="layout-breadcrumb">
     <Breadcrumb>
       <Breadcrumb-item to="/">首页</Breadcrumb-item>
-      <Breadcrumb-item>读者管理</Breadcrumb-item>
+      <Breadcrumb-item>图书管理</Breadcrumb-item>
     </Breadcrumb>
   </div>
   <div class="book">
-    <Row type="flex" justify="space-around" class="code-row-bg">
+    <Row type="flex" >
+      
+      <i-col class="add">
+        <Button type="primary" size="large" @click="addBook">+  新建图书</Button>
+      </i-col>
       <i-col class="search">
         <Input v-model="searchTitle" size="large" placeholder="  查询图书">
           <Select v-model="select" slot="prepend" style="width: 80px">
@@ -20,9 +24,10 @@
           ></Button>
         </Input>
       </i-col>
-      <i-col class="add">
-        <Button type="primary" size="large" @click="addBook">新建图书</Button>
-      </i-col>
+    </Row>
+    
+    <Row class = "tables">
+      <i-table stripe border :columns="column" :data="books"></i-table>
     </Row>
     <Row>
       <Page class="page" 
@@ -30,9 +35,6 @@
       @on-change="handlePageChange"
       @on-page-size-change="handlePageSizeChange"
       ></Page>
-    </Row>
-    <Row class = "tables">
-      <i-table stripe border :columns="column" :data="books"></i-table>
     </Row>
   </div>
   </div>
@@ -47,7 +49,7 @@ export default {
   components: AddBook,
   data () {
     return {
-      select: '',
+      select: 'isbn',
       books: [],
       currentBook: null,
       currentIndex: -1,
@@ -156,24 +158,16 @@ export default {
 </script>
 
 <style scoped>
-.search {
-  width: 50%;
-  margin: 40px 0 0;
-}
-.add{
-  margin: 40px 0 0;
-}
+
 .page{
   margin: 20px 40px 10px;
   float: right;
 }
 .tables{
-  margin: 10px 40px 0;
+  margin: 30px 40px 0;
   border-radius: 10px;
 }
-.show{
-  text-align: center;
-  color: #464c5b;
-  cursor: pointer;
+.add{
+  margin: 40px 40px 0;
 }
 </style>

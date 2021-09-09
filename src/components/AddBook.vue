@@ -10,46 +10,46 @@
   <div class="submit-form">
         <h4 style="text-align: center ;margin: 20px">新书入库</h4>
         <Row id="form1" type="flex" gutter="40">
-          <i-col class="form-left">
-            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
-              <Form-item label="ISBN" prop="isbn">
+          <i-col style="width: 50%">
+            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="100">
+              <Form-item label="ISBN：" prop="isbn">
                 <Input v-model="data.book.isbn" size="large" placeholder="请输入ISBN"></Input>
               </Form-item>
-              <Form-item label="作品名称" prop="title">
+              <Form-item label="作品名称：" prop="title">
                 <Input v-model="data.book.title" size="large" placeholder="请输入作品名称"></Input>
               </Form-item>
-              <Form-item label="推荐指数" prop="popularity">
-                <Input v-model="data.book.popularity" size="large" placeholder="请输入推荐指数"></Input>
-              </Form-item>
             </Form>
-			<Form ref="data.book.author" :model="data.book.author" :rules="ruleValidate.author" :label-width="80">
-              <Form-item label="作者" prop="name">
+			<Form ref="data.book.author" :model="data.book.author" :rules="ruleValidate.author" :label-width="100">
+              <Form-item label="作者：" prop="name">
                 <Input v-model="data.book.author.name" size="large" placeholder="请输入作者"></Input>
               </Form-item>
 			</Form>
-          </i-col>
-          <i-col class="form-right">
-            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
-              <Form-item label="出版社" prop="publisher">
-                <Input v-model="data.book.publisher" size="large" placeholder="请输入出版社"></Input>
-              </Form-item>
-              <Form-item label="定价" prop="price">
-                <Input v-model="data.book.price" size="large" placeholder="请输入定价"></Input>
-              </Form-item>
-              <Form-item label="出版年" prop="year">
-                <Input v-model="data.book.year" size="large" placeholder="请输入出版年"></Input>
-              </Form-item>
-            </Form>
-			<Form ref="data" :model="data" :rules="ruleValidate" :label-width="80">
-              <Form-item label="馆内位置" prop="location">
+			<Form ref="data" :model="data" :rules="ruleValidate" :label-width="100">
+              <Form-item label="馆内位置：" prop="location">
                 <Input v-model="data.location" size="large" placeholder="请输入馆内位置"></Input>
               </Form-item>
 			</Form>
           </i-col>
+          <i-col style="width: 50%">
+            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
+              <Form-item label="出版社：" prop="publisher">
+                <Input v-model="data.book.publisher" size="large" placeholder="请输入出版社"></Input>
+              </Form-item>
+              <Form-item label="定价：" prop="price">
+                <Input v-model="data.book.price" size="large" placeholder="请输入定价"></Input>
+              </Form-item>
+              <Form-item label="出版年：" prop="year">
+                <Input v-model="data.book.year" size="large" placeholder="请输入出版年"></Input>
+              </Form-item>
+              <Form-item label="推荐指数：" prop="popularity">
+                <Input v-model="data.book.popularity" size="large" placeholder="请输入推荐指数"></Input>
+              </Form-item>
+            </Form>
+          </i-col>
         </Row>
         <div id="form2">
-            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="80">
-              <Form-item label="简介" prop="description">
+            <Form ref="data.book" :model="data.book" :rules="ruleValidate" :label-width="100">
+              <Form-item label="简介：" prop="description">
                 <Input v-model="data.book.description" size="large"
                        type="textarea"
                        rows="5" placeholder="请输入作品简介"></Input>
@@ -207,7 +207,13 @@ export default {
 
 <style>
 .submit-form {
-	max-width: 300px;
-	margin: auto;
+	max-width: 800px;
+	margin: 30px auto;
+}
+.form-left {
+  width: 50%;
+}
+.form-right {
+  width: 50%;
 }
 </style>
