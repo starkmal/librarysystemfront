@@ -80,8 +80,7 @@ export default {
           align: 'center',
           render: (h, params) => {
             let row = params.row;
-            return h('div',[
-                h('span', {
+            return h('span', {
                   style: {
                     cursor: 'pointer',
                     color: '#3399ff',
@@ -91,20 +90,7 @@ export default {
                       this.$router.push(`/book/${row.isbn}`);
                     }
                   }
-                }, '编辑'),
-                h('span', '  |  '),
-                h('span', {
-                  style: {
-                    cursor: 'pointer',
-                    color: '#3399ff',
-                  },
-                  on: {
-                    click: () => {
-                      this.$router.push('/book/bookadd')
-                    }
-                  }
-                }, '删除')
-            ]);
+                }, '详情');
           }
         }
       ]

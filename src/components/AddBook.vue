@@ -8,7 +8,6 @@
     </Breadcrumb>
   </div>
   <div class="submit-form">
-      <div v-if="!submitted">
         <h4 style="text-align: center ;margin: 20px">新书入库</h4>
         <Row id="form1" type="flex" gutter="40">
           <i-col class="form-left">
@@ -60,10 +59,6 @@
         <div id="btn" style="text-align:center">
           <Button type="primary" size="large" @click="submit">提交</Button>
         </div>
-      </div>
-      <div v-else>
-        <h4 style="margin: 100px auto">You submitted successfully!</h4>
-      </div>
     </div>
   </div>
 </template>
@@ -103,15 +98,18 @@ export default {
 				},
 				publisher: [{required: true, message: '出版社不能为空', trigger: 'blur'}],
 				location: [{required: true, message: '位置不能为空', trigger: 'blur'}]
-			},
-			submitted: false
+			}
 		};
 	},
 	methods: {
 
 		submit() {
 			AuthorService.getByName(this.data.book.author.name)
-			.then(() => this.step2()) //作者已在库中
+			.then(res => {
+				this.data.book.author = res.data[0];
+				console.log(this.data.book.author);
+				this.step2();
+			}) //作者已在库中
 			.catch(()=>{
 				let data = {
 					name: this.data.book.author.name,
@@ -164,19 +162,31 @@ export default {
 			console.log(data);
 
 			BookInLibService.create(data)
-			.then()
+			.then(() => this.submitted())
 			.catch(e=>console.log(e));
-
-			this.submitted = true;
+		},
+		submitted() {
+			this.$Message.success('创建成功！');
+			this.$router.push(`/book/${this.data.book.isbn}`);
 		},
 
 		async handleISBN(isbn) {
 			await BookService.get(isbn)
 				.then(res => {
-					console.log(res.data);
 					this.data.book = res.data;
-				})
-				.catch(e => console.log(e));
+					// this.data.book = {
+					// 	title: res.data.title,
+					// 	popularity: res.data.popularity,
+					// 	year: res.data.year,
+					// 	publisher: res.data.publisher,
+					// 	isbn: res.data.isbn,
+					// 	description: res.data.description,
+					// 	price: res.data.price,
+					// 	author: {
+					// 		name: null
+					// 	}
+					// };
+				});
 		}
 	},
 	/*

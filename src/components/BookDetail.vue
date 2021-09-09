@@ -109,29 +109,25 @@ export default {
               },
               on: {
                 click: () => {
-                  this.changeState(row.id);
+                  this.tryBorrow(row);
                 }
               }
-            }, '更改状态');
+            }, '借出');
           }
         }
       ]
     };
   },
   methods: {
-    async changeState(id) {
-      console.log(id);
-      BookInLibService.changestate(id)
-      .then(()=>{
-        BookService.get(this.book.isbn)
-        .then((res) => {
-          this.book = res.data;
-          this.changePage(this.page);
-          console.log(res.data);
-        })
-        .catch((e) => console.log(e));
-      })
-      .catch(e=>console.log(e));
+    tryBorrow(row) {
+      if (row.state === '已借出') {
+        this.$Message.warning('无法借出不在库的图书！');
+        return;
+      }
+      this.$router.push({
+        name: `AddBorrow`,
+        params: { id: row.id }
+        });
     },
     changeEdit() {
       if(this.edit === false) {

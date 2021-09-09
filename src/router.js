@@ -57,7 +57,7 @@ export default new Router({
         },
         {
             path: "/borrow/addborrow",
-            name: "AddBook",
+            name: "AddBorrow",
             component: () => import("./components/AddBorrow")
         }
 	]

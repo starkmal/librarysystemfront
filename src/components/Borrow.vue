@@ -13,6 +13,7 @@
             <Option value="isbn">ISBN</Option>
             <Option value="title">书名</Option>
             <Option value="readername">读者用户名</Option>
+            <Option value="id">BID</Option>
           </Select>
           <Button slot="append" icon="ios-search"
           @click="page = 1; retrieveBorrows();"
@@ -106,19 +107,19 @@ export default {
   methods: {
     finishborrow(borrow) {
       if (borrow.rtime != null) {
-        alert('该条目已经完成！');
+        this.$Message.error('该次借阅已经完成！');
         return;
       }
       console.log(borrow);
       let data = {
         id: borrow.id,
-        time: new Date().getTime()
+        time: new Date().getTime() + 28800000
       };
       BorrowService.update(data)
       .then(() => {
         this.retrieveBorrows();
-        BookInLibService.changestate(borrow.bid)
-        .then()
+        BookInLibService.setstate(borrow.bid, "在库")
+        .then(()=>this.$Message.success('归还成功！'))
         .catch(e=>console.log(e));
       })
       .catch(e => console.log(e));

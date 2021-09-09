@@ -57,7 +57,7 @@
           </p>
           <ul>
             <li v-for="item in bookList" v-bind:key="item" class="a">
-              <a>{{item.name}}</a>
+              <a @click="jump(item.isbn)">{{item.name}}</a>
               <label class="po">{{item.popularity}}</label>
             </li>
           </ul>
@@ -102,11 +102,15 @@ components: {
     }
   },
   methods: {
+    jump(isbn) {
+      this.$router.push(`/book/${isbn}`);
+    },
     retrieveData() {
       BookService.getTop()
       .then(res => {
         for (let i = 0; i < res.data.length; i ++) {
           this.bookList.push({
+            isbn: res.data[i].isbn,
             name: res.data[i].title,
             popularity: res.data[i].popularity
           });
